@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bouncing ball</title>
+
+    <script src="js/vendor/three.min.js"></script>
+    <script src="js/vendor/dat.gui.min.js"></script>
+    <script src="js/vendor/stats.min.js"></script>
+    <script src="js/vendor/OrbitControls.js"></script>
+    <script src="js/vendor/tween.js"></script>
+    <script src="js/main.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<script>
+    var bouncingBall = new BouncingBall(THREE, TWEEN, dat.GUI, Stats);
+
+    window.onload = bouncingBall.init;
+    window.addEventListener('resize', bouncingBall.handleResize, false);
+</script>
+<body>
+</body>
+</html>
