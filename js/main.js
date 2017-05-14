@@ -34,7 +34,7 @@ var BouncingBall = function (THREE, TWEEN, GUI, Stats) {
         ball = new THREE.Mesh(ballGeometry, cubeMaterial);
         ball.name = 'cube';
         ball.castShadow = true;
-        ball.position.y = 10;
+        ball.position.y = 20;
 
         scene.add(ball);
 
@@ -57,7 +57,7 @@ var BouncingBall = function (THREE, TWEEN, GUI, Stats) {
 
         control = new function () {
             this.rotationSpeed = 0.005;
-            this.opacity = 0.6;
+            this.duration = 2000;
             this.color = cubeMaterial.color.getHex();
         };
 
@@ -73,33 +73,24 @@ var BouncingBall = function (THREE, TWEEN, GUI, Stats) {
     function setupTweens() {
         TWEEN.removeAll();
 
-        var position = {y: 10};
+        var upPosition = {y: 20};
+        var downPosition = {y: 2};
 
-        var targetDown = {y: 2};
-        var tweenDown = new TWEEN.Tween(position)
-            .to(targetDown, 1000)
+        var tween = new TWEEN.Tween(upPosition)
+            .to(downPosition, control.duration)
+            .delay(500)
             .onUpdate(function () {
-                ball.position.y = position.y;
+                ball.position.y = upPosition.y;
             });
-        tweenDown.easing(TWEEN.Easing.Quadratic.In);
+        tween.easing(TWEEN.Easing.Bounce.Out);
 
-        var targetUp = {y: 10};
-        var tweenUp = new TWEEN.Tween(position)
-            .to(targetUp, 1000)
-            .onUpdate(function () {
-                ball.position.y = position.y;
-            });
-        tweenUp.easing(TWEEN.Easing.Quadratic.Out);
-
-        tweenDown.chain(tweenUp);
-        tweenUp.chain(tweenDown);
-
-        tweenDown.start();
+        tween.start();
     }
 
     function addControlGui(controlObject) {
         var gui = new GUI();
         gui.add(controlObject, 'rotationSpeed', -0.01, 0.01);
+        gui.add(controlObject, 'duration', 1000, 3000);
         gui.addColor(controlObject, 'color');
     }
 
@@ -136,6 +127,7 @@ var BouncingBall = function (THREE, TWEEN, GUI, Stats) {
 
     return {
         'init': init,
-        'handleResize': handleResize
+        'handleResize': handleResize,
+        'setupTweens': setupTweens
     }
 };

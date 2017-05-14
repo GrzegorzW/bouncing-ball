@@ -21,6 +21,7 @@
     var bouncingBall = new BouncingBall(THREE, TWEEN, dat.GUI, Stats);
 
     window.onload = bouncingBall.init;
+    document.onclick = bouncingBall.setupTweens;
     window.addEventListener('resize', bouncingBall.handleResize, false);
 </script>
 <body>
