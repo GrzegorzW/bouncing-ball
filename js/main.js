@@ -6,6 +6,9 @@ var BouncingBall = function (THREE, TWEEN, GUI, Stats) {
     var stats;
     var ball;
 
+    var upPosition = {y: 20};
+    var downPosition = {y: 2};
+
     function init() {
 
         scene = new THREE.Scene();
@@ -73,18 +76,25 @@ var BouncingBall = function (THREE, TWEEN, GUI, Stats) {
     function setupTweens() {
         TWEEN.removeAll();
 
-        var upPosition = {y: 20};
-        var downPosition = {y: 2};
+        var up = {y: upPosition.y};
 
-        var tween = new TWEEN.Tween(upPosition)
+        var tween = new TWEEN.Tween(up)
             .to(downPosition, control.duration)
             .delay(500)
+            .easing(TWEEN.Easing.Bounce.Out)
             .onUpdate(function () {
-                ball.position.y = upPosition.y;
+                ball.position.y = up.y;
             });
-        tween.easing(TWEEN.Easing.Bounce.Out);
 
         tween.start();
+    }
+
+    function resetTweens() {
+        if (ball.position.y !== downPosition.y) {
+            return;
+        }
+
+        setupTweens();
     }
 
     function addControlGui(controlObject) {
@@ -128,6 +138,6 @@ var BouncingBall = function (THREE, TWEEN, GUI, Stats) {
     return {
         'init': init,
         'handleResize': handleResize,
-        'setupTweens': setupTweens
+        'resetTweens': resetTweens
     }
 };
